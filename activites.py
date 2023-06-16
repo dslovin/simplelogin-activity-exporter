@@ -20,7 +20,7 @@ while True:
     req = requests.get(f'https://app.simplelogin.io/api/v2/aliases?page_id={page_id}',headers=headers)
     aa = req.json()["aliases"]
     for a in aa:
-        aliases.append({'id':a['id'],'email':a['email']})
+        aliases.append({'id':a['id'],'email':a['email'],'mailboxes':','.join([aa['email'] for aa in a['mailboxes']])})
     if len(aa)<=0:
         break
     page_id = page_id+1
@@ -34,7 +34,7 @@ for alias in aliases:
         for aa in activities:
             date = datetime.datetime.fromtimestamp(aa['timestamp']).date()
             if date == (datetime.date.today()-datetime.timedelta(days = 1)):
-                act = {'id':alias['id'],'email':alias['email'],'action':aa['action'],'from':aa['from'],'timestamp':aa['timestamp'],'to':aa['to'],'reverse_alias':aa['reverse_alias'],'reverse_alias_address':aa['reverse_alias_address']}
+                act = {'id':alias['id'],'email':alias['email'],'mailboxes':alias['mailboxes'],'action':aa['action'],'from':aa['from'],'timestamp':aa['timestamp'],'to':aa['to'],'reverse_alias':aa['reverse_alias'],'reverse_alias_address':aa['reverse_alias_address']}
                 activity.append(act)
         if len(activities)<=0:
             break
